@@ -20,7 +20,10 @@ for(i in 1:length(files)){
   #read rawNTA file in directory
    NTA <- read_delim(files[i],
                     "\t", escape_double = FALSE, trim_ws = TRUE, 
-                    skip = 69)
+                    )
+   NTA <- read_delim(files[i],
+                     "\t", escape_double = FALSE, trim_ws = TRUE, 
+                     skip = which(NTA[,1] == "Size / nm"))
      #select 1-1000nm
   NTAsel <- NTA[1:34,] 
   #calculate percentage of total for concentration
