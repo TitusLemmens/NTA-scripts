@@ -10,6 +10,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 NTA.pct.conc  <- data.frame(matrix(ncol=5,nrow=0))
 NTA.pct.vol   <- data.frame(matrix(ncol=5,nrow=0))
 NTA.pct.area  <- data.frame(matrix(ncol=5,nrow=0))
+NTA.conc      <- data.frame(matrix(ncol=5,nrow=0))
 
 #get files list in directory that end in .txt
 files <- list.files(pattern = ".*\\.txt$")
@@ -48,19 +49,25 @@ for(i in 1:length(files)){
   n <-(sum(NTAsel$`Area / nm^2`[15:21]) / sum(NTAsel$`Area / nm^2`)*100)
   o <-(sum(NTAsel$`Area / nm^2`[22:34]) / sum(NTAsel$`Area / nm^2`)*100)
   NTA.pct.area  <- rbind(NTA.pct.area, c(k,l,m,n,o))
-
+  #calculate percentage of total for concentration
+  p <-(sum(NTAsel$`Concentration / cm-3`[1:4]))
+  q <-(sum(NTAsel$`Concentration / cm-3`[5:7]))
+  r <-(sum(NTAsel$`Concentration / cm-3`[8:14]))
+  s <-(sum(NTAsel$`Concentration / cm-3`[15:21]))
+  t <-(sum(NTAsel$`Concentration / cm-3`[22:34]))
+  NTA.conc  <- rbind(NTA.conc, c(p,q,r,s,t))  
 }
 #add column names
 coln <- c("0-105nm","105-195nm","195-405nm","405-615nm","615-1005nm")
 colnames(NTA.pct.conc) <- coln
 colnames(NTA.pct.vol) <- coln
 colnames(NTA.pct.area) <- coln
-
+colnames(NTA.conc) <- coln
 #add row mames as the filename
 row.names(NTA.pct.conc) <- files
 row.names(NTA.pct.vol) <- files
 row.names(NTA.pct.area) <- files
-
+row.names(NTA.conc) <- files
 ##show dataframe
 #print(NTA.pct.conc)
 #print(NTA.pct.vol)
@@ -70,3 +77,4 @@ row.names(NTA.pct.area) <- files
 write.csv(NTA.pct.conc,"pct.of.total.concentration.csv")
 write.csv(NTA.pct.vol,"pct.of.total.volume.csv")
 write.csv(NTA.pct.area,"pct.of.total.area.csv")
+write.csv(NTA.conc,"concentration.csv")
